@@ -12,7 +12,10 @@ def read_inputs(input_file: str) -> List[Tuple[Tuple[int, int], Tuple[int, int]]
     line_regex = re.compile(r"(\d+),(\d+) -> (\d+),(\d+)")
 
     return [
-        ((int(match.group(1)), int(match.group(2))), (int(match.group(3)), int(match.group(4))))
+        (
+            (int(match.group(1)), int(match.group(2))),
+            (int(match.group(3)), int(match.group(4))),
+        )
         for match in [line_regex.match(line.strip()) for line in lines]
     ]
 
