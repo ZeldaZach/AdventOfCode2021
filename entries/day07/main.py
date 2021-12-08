@@ -23,22 +23,14 @@ def part2() -> int:
     # 25 minutes
     positions = read_inputs("input.txt")
 
-    min_value = min(positions)
-    max_value = max(positions)
-
-    best_found = float("inf")
-
-    for test_position in range(min_value, max_value):
-        # S = n(n+1)/2
-        fuel_used = sum(
+    return min(
+        sum(
+            # S = n(n+1)/2
             abs(test_position - crab_point) * (abs(test_position - crab_point) + 1) // 2
             for crab_point in positions
         )
-
-        if fuel_used < best_found:
-            best_found = fuel_used
-
-    return best_found
+        for test_position in range(min(positions), max(positions))
+    )
 
 
 def main() -> None:
