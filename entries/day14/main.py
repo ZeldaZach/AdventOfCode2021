@@ -46,7 +46,7 @@ def part2() -> int:
 
     polymer_mapping = defaultdict(int)
     for i in range(len(polymer) - 1):
-        two_letters = "".join(polymer[i: i + 2])
+        two_letters = "".join(polymer[i : i + 2])
         polymer_mapping[two_letters] += 1
 
     for i in range(0, 40):
