@@ -11,35 +11,30 @@ def read_inputs(input_file: str) -> List[int]:
     return list(map(int, area_regex.findall(line)[0]))
 
 
-def check_if_probe_hits_recursively(
+def check_if_probe_hits(
     probe_x: int,
     probe_y: int,
     velocity_x: int,
     velocity_y: int,
     target_x_range: List[int],
     target_y_range: List[int],
-    max_probe_y: Union[int, float],
 ):
-    probe_x += velocity_x
-    probe_y += velocity_y
+    max_x_target = max(target_x_range)
+    min_y_target = min(target_y_range)
+    max_probe_y = float("-inf")
 
-    velocity_x += -1 if velocity_x > 0 else (1 if velocity_x else 0)
-    velocity_y -= 1
+    while probe_x <= max_x_target and probe_y >= min_y_target:
+        probe_x += velocity_x
+        probe_y += velocity_y
 
-    if probe_x in target_x_range and probe_y in target_y_range:
-        return True, max_probe_y
-    if probe_x > max(target_x_range) or probe_y < min(target_y_range):
-        return False, max_probe_y
+        velocity_x += -1 if velocity_x > 0 else (1 if velocity_x else 0)
+        velocity_y -= 1
+        max_probe_y = max(max_probe_y, probe_y)
 
-    return check_if_probe_hits_recursively(
-        probe_x,
-        probe_y,
-        velocity_x,
-        velocity_y,
-        target_x_range,
-        target_y_range,
-        max(max_probe_y, probe_y),
-    )
+        if probe_x in target_x_range and probe_y in target_y_range:
+            return True, max_probe_y
+
+    return False, -1
 
 
 def anal_the_probes(
@@ -53,8 +48,8 @@ def anal_the_probes(
 
     for probe_x in range(1, max(valid_target_x)):
         for probe_y in range(min(valid_target_y), 100):
-            does_hit_target, max_height = check_if_probe_hits_recursively(
-                0, 0, probe_x, probe_y, valid_target_x, valid_target_y, float("-inf")
+            does_hit_target, max_height = check_if_probe_hits(
+                0, 0, probe_x, probe_y, valid_target_x, valid_target_y
             )
             if does_hit_target:
                 max_height_of_valid_probe = max(max_height_of_valid_probe, max_height)
